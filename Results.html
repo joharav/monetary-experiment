@@ -1,0 +1,54 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+
+{% block scripts %}
+    <script type="text/javascript">
+      window.onload = function () 
+      {
+        document.getElementById("token_color_").value = "{{ token_color }}";
+        document.getElementById("trade_succeeded_").value = "{{ trade_succeeded }}";
+      }
+    </script>
+{% endblock %}
+
+{% block title %}
+    Resultados
+{% endblock %}
+
+{% block content %}
+    {{ form.errors }} 
+    <input type="hidden" name="token_color" id="token_color_">
+    <input type="hidden" name="trade_succeeded" id="trade_succeeded_">
+
+    <p>
+        En esta ronda, fuiste un {{ role_pre }}.
+        <br>
+        {% if initial_token_color != 'None' %}
+        Tuviste un token de color {{ initial_token_color }}.
+        <br>
+        {% endif %}
+        Fuiste aleatoriamente emparejado con un {{ other_role_pre }}.
+        <br>
+        {% if player.trade_attempted %}
+        Intentaste intercambiar.
+        <br>
+        {% else %}
+        No pudiste o no intentaste intercambiar.
+        {% endif %}
+        {% if trade_succeeded %}
+        Realizaste un intercambio. Ahora tienes un
+        {% if new_token_color != 'None' %}
+        token de color {{ new_token_color }}.
+        {% else %}
+        bien de consumo.
+        {% endif %}
+        <br>
+        {% endif %}
+        Ganaste {{ round_payoff|c }} en esta ronda.
+        <br>
+        Tu pago acumulado, hasta el momento, es de {{ player.participant.payoff|c }}.
+    </p>
+
+    {% next_button %}
+
+{% endblock %}
